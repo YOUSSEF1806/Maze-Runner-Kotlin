@@ -1,7 +1,5 @@
 package com.youyou
 
-import kotlin.random.Random
-
 fun main() {
     println("Please, enter the size of a maze")
     val (nbLines, nbCols) = readln().split(" ").map { it.toInt() }
@@ -9,5 +7,3 @@ fun main() {
     maze.generateFullMaze()
     println("\n$maze")
 }
-
-

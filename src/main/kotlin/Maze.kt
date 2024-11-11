@@ -40,12 +40,12 @@ data class Maze(val nbLines: Int = 10, val nbCols: Int = 10) {
         maze[currentCell.first][currentCell.second] = true
         val possibleCells = mutableMapOf(
             currentCell to
-                    validCellsFromCellPlus2(currentCell.first, currentCell.second).toMutableList()
+                    validCellsFromCellPlus2(currentCell.first, currentCell.second)
         )
         buildInnerMazeLoop(possibleCells)
     }
 
-    private fun buildInnerMazeLoop(possibleCells: MutableMap<Pair<Int, Int>, MutableList<Pair<Int, Int>>>) {
+    private fun buildInnerMazeLoop(possibleCells: MutableMap<Pair<Int, Int>, List<Pair<Int, Int>>>) {
         var possibleCells1 = possibleCells
         if (possibleCells1.isEmpty())
             return
@@ -53,10 +53,10 @@ data class Maze(val nbLines: Int = 10, val nbCols: Int = 10) {
         val currentCell = possibleCells1.keys.random()
         val pickedCell = possibleCells1[currentCell]?.random()!!
         makePathFrom(currentCell, pickedCell)
-        possibleCells1[pickedCell] = validCellsFromCellPlus2(pickedCell.first, pickedCell.second).toMutableList()
+        possibleCells1[pickedCell] = validCellsFromCellPlus2(pickedCell.first, pickedCell.second)
 
-        possibleCells1.forEach { it.value.remove(pickedCell) }
-        possibleCells1 = possibleCells1.filterValues { it.isNotEmpty() }.toMutableMap()
+        possibleCells1 = possibleCells1.mapValues { it.value - pickedCell }
+            .filterValues { it.isNotEmpty() }.toMutableMap()
         buildInnerMazeLoop(possibleCells1)
     }
 
@@ -77,37 +77,31 @@ data class Maze(val nbLines: Int = 10, val nbCols: Int = 10) {
 
     private fun nearLeftSideCells(): List<Pair<Int, Int>> {
         val selectedCols = mutableListOf<Int>()
-        for (j in 0..<nbCols) {
-            for (i in 0..<nbLines) {
-                if (maze[i][j]) {
-                    selectedCols.add(j)
-                    break
-                }
-            }
-        }
-        selectedCols.retainAll(listOf(selectedCols.first(), selectedCols.last()))
+        (0 until nbCols).indexOfFirst { getCol(it).contains(true) }.let { selectedCols.add(it) }
+        (0 until nbCols).indexOfLast { getCol(it).contains(true) }.let { selectedCols.add(it) }
+
         val selectedColsCells = selectedCols.map { j ->
-            (0..<nbLines).map { i ->
+            maze.mapIndexedNotNull{ i, _->
                 if (maze[i][j]) Pair(i, j) else null
-            }.filterNotNull().random()
+            }.random()
         }
         return selectedColsCells
     }
 
     private fun nearTopSideCells(): List<Pair<Int, Int>> {
         val selectedLines = mutableListOf<Int>()
-        for (i in maze.indices) {
-            if (maze[i].contains(true))
-                selectedLines.add(i)
-        }
-        selectedLines.retainAll(listOf(selectedLines.first(), selectedLines.last()))
+        maze.indexOfFirst { it.contains(true) }.let { selectedLines.add(it) }
+        maze.indexOfLast { it.contains(true) }.let { selectedLines.add(it) }
+
         val selectedLineCells = selectedLines.map { i ->
-            maze[i].mapIndexed { j, value ->
+            maze[i].mapIndexedNotNull { j, value ->
                 if (value) Pair(i, j) else null
-            }.filterNotNull().random()
+            }.random()
         }
         return selectedLineCells
     }
+
+    private fun getCol(colIndex: Int): List<Boolean> = maze.map { it[colIndex] }
 
     override fun toString(): String {
         return maze.joinToString("\n") {
