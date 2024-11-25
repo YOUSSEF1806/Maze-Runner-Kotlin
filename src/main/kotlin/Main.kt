@@ -1,9 +1,9 @@
 package com.youyou
 
+import kotlin.io.path.Path
+import kotlin.io.path.exists
+
 fun main() {
-    println("Please, enter the size of a maze")
-    val (nbLines, nbCols) = readln().split(" ").map { it.toInt() }
-    val maze = Maze(nbLines, nbCols)
-    maze.generateFullMaze()
-    println("\n$maze")
+    val maze: Maze? = null
+
 }
