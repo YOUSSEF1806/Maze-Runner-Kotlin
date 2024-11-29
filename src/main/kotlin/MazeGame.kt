@@ -5,47 +5,69 @@ import kotlin.io.path.exists
 
 object MazeGame {
     var maze: Maze? = null
+    var exitFlag = false
 
+    fun launch() {
+        while (!exitFlag) {
+            processMenuChoice(AppMenu.printMenu(maze != null))
+        }
+        println("Bye!")
+    }
 
-    fun processMenuChoice(choice: String, extended: Boolean) {
+    private fun processMenuChoice(choice: String) {
         when (choice) {
-            "1" -> {  }
-            "2" -> {  }
-            "3" -> {  }
-            "4" -> {  }
-            "0" -> {  }
-            else ->
+            "1" -> {
+                actionMenu1(AppMenu.menu1())
+                actionMenu4()
+            }
+            "2" -> {
+                actionMenu2(AppMenu.menu2())
+            }
+            "3" -> {
+                if (maze == null) {
+                    AppMenu.menuOptionError()
+                } else {
+                    actionMenu3(AppMenu.menu3())
+                }
+            }
+            "4" -> {
+                if (maze == null) {
+                    AppMenu.menuOptionError()
+                } else {
+                    actionMenu4()
+                }
+            }
+            "0" -> { exitFlag = true }
+            else -> { AppMenu.menuOptionError() }
         }
     }
 
-    fun actionMenu1() {
-        println("Please, enter the size of new maze")
-        val mazeSize = readln().toInt()
-        val maze = MazeGenerator.generateFullMaze(mazeSize)
-        println("\n$maze")
+    private fun actionMenu1(mazeSize: Int) {
+        maze = MazeGenerator.generateFullMaze(mazeSize)
     }
 
-    fun actionMenu2() {
-        println("File name to load ? ")
-        val fileName = readln()
+    private fun actionMenu2(fileName: String): Boolean {
         if (Path(fileName).exists()) {
-            val loadedMaze = Maze.loadFromFile(fileName)
+            val loadedMaze = MazeIO.loadFromFile(fileName)
             if (loadedMaze == null) {
                 AppMenu.fileErrorMessage(-1)
+                return false
+            } else {
+                maze = loadedMaze
+                return true
             }
         } else {
             AppMenu.fileErrorMessage(0, fileName)
+            return false
         }
     }
 
-    fun actionMenu3() {
-        println("file name ? ")
-        val fileName = readln()
-        //todo
+    private fun actionMenu3(fileName: String) {
+        MazeIO.saveToFile(fileName, maze!!)
     }
 
-    fun actionMenu4() {
-        println("\n${MazeGame}")
+    private fun actionMenu4() {
+        println("\n$maze")
     }
 
 }

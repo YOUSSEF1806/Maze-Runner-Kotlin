@@ -1,12 +1,9 @@
 package com.youyou
 
-import kotlin.io.path.Path
-import kotlin.io.path.exists
-
 object AppMenu {
 
     fun printMenu(extended: Boolean): String {
-        println("=== Menu ===")
+        println("\n=== Menu ===")
         println("1. Generate a new maze")
         println("2. Load a maze")
         if (extended) {
@@ -15,17 +12,6 @@ object AppMenu {
         }
         println("0. Exit")
         return readln()
-    }
-
-    fun processMenuChoice(choice: String, extended: Boolean) {
-        when (choice) {
-            "1" -> {  }
-            "2" -> {  }
-            "3" -> {  }
-            "4" -> {  }
-            "0" -> {  }
-            else -> { }
-        }
     }
 
     fun menu1(): Int {
@@ -38,10 +24,9 @@ object AppMenu {
         return readln()
     }
 
-    fun actionMenu3() {
+    fun menu3(): String {
         println("file name ? ")
-        val fileName = readln()
-        //todo
+        return readln()
     }
 
     fun fileErrorMessage(errorCode: Int, fileName: String = "") {
@@ -52,7 +37,9 @@ object AppMenu {
             println("The file $fileName does not exist")
         }
     }
-    fun actionMenu4() {
-        println("\n${MazeGame}")
+
+    fun menuOptionError() {
+        println("Incorrect option. Please try again;")
     }
+
 }
