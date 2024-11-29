@@ -4,8 +4,8 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 
 object MazeGame {
-    var maze: Maze? = null
-    var exitFlag = false
+    private var maze: Maze? = null
+    private var exitFlag = false
 
     fun launch() {
         while (!exitFlag) {
