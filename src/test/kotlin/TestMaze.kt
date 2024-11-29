@@ -23,14 +23,14 @@ class TestMaze {
 
     @Test
     fun testSetPass() {
-        val maze = Maze(8)
+        val maze = Maze(9)
         (0..<maze.mazeSize).forEach { maze.setPass(it, maze.mazeSize/2) }
         println("Maze size ${maze.mazeSize}\n$maze")
     }
 
     @Test
     fun testGetCol() {
-        val maze = Maze(8)
+        val maze = Maze(9)
         (0..<maze.mazeSize).forEach { maze.setPass(it, it) }
         println("Maze size ${maze.mazeSize}\n$maze")
         val colIndex = 2
@@ -41,7 +41,7 @@ class TestMaze {
     @Test
     fun testPathFromCellPlus2() {
         val maze = Maze()
-        var currentCell = Pair(Random.nextInt(1, maze.mazeSize - 1), Random.nextInt(1, maze.nbCols - 1))
+        var currentCell = Pair(Random.nextInt(1, maze.mazeSize - 1), Random.nextInt(1, maze.mazeSize - 1))
         var pathFromCellPlus2 = maze.validCellsFromCellPlus2(currentCell.first, currentCell.second)
         println("$currentCell ==> $pathFromCellPlus2")
 

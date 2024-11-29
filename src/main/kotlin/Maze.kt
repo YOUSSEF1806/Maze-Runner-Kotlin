@@ -1,11 +1,6 @@
 package com.youyou
 
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
-import kotlin.io.path.writeLines
-import kotlin.random.Random
-
-data class Maze(var mazeSize: Int = 10) {
+data class Maze(val mazeSize: Int = 10) {
     private var maze = Array(mazeSize) { Array(mazeSize) {false} }
 
     constructor(mazeGrid: Array<Array<Boolean>>) : this(mazeGrid.size) {
@@ -57,11 +52,10 @@ data class Maze(var mazeSize: Int = 10) {
         maze[line][col] = true
     }
 
-    // TODO Not sure this is right :p
     fun getCol(colIndex: Int): List<Boolean> = maze.map { it[colIndex] }
 
     fun toFileStrings(): List<String> = maze.map {
-        it.joinToString { cell -> if (cell) "1" else "0" }
+        it.joinToString(" ") { cell -> if (cell) "1" else "0" }
     }
 
     override fun toString(): String {

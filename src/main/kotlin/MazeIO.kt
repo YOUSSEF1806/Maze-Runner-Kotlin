@@ -13,15 +13,12 @@ object MazeIO {
     fun loadFromFile(fileName: String): Maze? {
         val tempMaze = Path(fileName).readLines()
             .map {
-                it.toCharArray()
-                    .map { chr -> chr == '1' }.toTypedArray()
+                it.split(" ").map { chr -> chr == "1" }.toTypedArray()
             }.toTypedArray()
         val count = tempMaze.map { it.size == tempMaze.size }.count { true }
         if (count != tempMaze.size)
             return null
 
-        val loadedMaze = Maze(tempMaze.size)
-        loadedMaze.maze = tempMaze
-        return loadedMaze
+        return Maze(tempMaze)
     }
 }
