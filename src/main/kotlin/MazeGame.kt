@@ -24,18 +24,13 @@ object MazeGame {
                 actionMenu2(AppMenu.menu2())
             }
             "3" -> {
-                if (maze == null) {
-                    AppMenu.menuOptionError()
-                } else {
-                    actionMenu3(AppMenu.menu3())
-                }
+                doActionIfNotNull { actionMenu3(AppMenu.menu3()) }
             }
             "4" -> {
-                if (maze == null) {
-                    AppMenu.menuOptionError()
-                } else {
-                    actionMenu4()
-                }
+                doActionIfNotNull { actionMenu4() }
+            }
+            "5" -> {
+                doActionIfNotNull({ actionMenu5() })
             }
             "0" -> { exitFlag = true }
             else -> { AppMenu.menuOptionError() }
@@ -70,4 +65,16 @@ object MazeGame {
         println("\n$maze")
     }
 
+    private fun actionMenu5() {
+        val escapeTrail = MazeSolver.findEscape(maze!!)
+        println("\n${maze?.printSolution(escapeTrail)}")
+    }
+
+    private fun doActionIfNotNull(action: () -> Unit) {
+        if (maze == null) {
+            AppMenu.menuOptionError()
+        } else {
+            action()
+        }
+    }
 }

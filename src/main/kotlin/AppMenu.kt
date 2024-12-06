@@ -9,6 +9,7 @@ object AppMenu {
         if (extended) {
             println("3. Save the maze")
             println("4. Display the maze")
+            println("5. Find the escape")
         }
         println("0. Exit")
         return readln()

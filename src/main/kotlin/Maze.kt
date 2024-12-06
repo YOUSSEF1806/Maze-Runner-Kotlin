@@ -7,6 +7,14 @@ data class Maze(val mazeSize: Int = 10) {
         maze = mazeGrid
     }
 
+    fun validMoves(x: Int, y: Int) =
+        listOf(Pair(x - 1, y), Pair(x, y - 1), Pair(x + 1, y), Pair(x, y + 1))
+            .filter {
+                it.first in (1 until mazeSize)
+                        && it.second in (1 until mazeSize)
+                        && maze[it.first][it.second]
+            }
+
     fun validCellsFromCellPlus2(x: Int, y: Int) =
         listOf(Pair(x - 2, y), Pair(x, y - 2), Pair(x + 2, y), Pair(x, y + 2))
             .filter {
@@ -22,40 +30,28 @@ data class Maze(val mazeSize: Int = 10) {
         maze[pickedCell.first][pickedCell.second] = true
     }
 
-    fun nearLeftSideCells(): List<Pair<Int, Int>> {
-        val selectedCols = mutableListOf<Int>()
-        (0 until mazeSize).indexOfFirst { getCol(it).contains(true) }.let { selectedCols.add(it) }
-        (0 until mazeSize).indexOfLast { getCol(it).contains(true) }.let { selectedCols.add(it) }
-
-        val selectedColsCells = selectedCols.map { j ->
-            maze.mapIndexedNotNull{ i, _->
-                if (maze[i][j]) Pair(i, j) else null
-            }.random()
-        }
-        return selectedColsCells
-    }
-
-    fun nearTopSideCells(): List<Pair<Int, Int>> {
-        val selectedLines = mutableListOf<Int>()
-        maze.indexOfFirst { it.contains(true) }.let { selectedLines.add(it) }
-        maze.indexOfLast { it.contains(true) }.let { selectedLines.add(it) }
-
-        val selectedLineCells = selectedLines.map { i ->
-            maze[i].mapIndexedNotNull { j, value ->
-                if (value) Pair(i, j) else null
-            }.random()
-        }
-        return selectedLineCells
-    }
-
     fun setPass(line: Int, col: Int) {
         maze[line][col] = true
     }
 
+    fun getLine(lineIndex: Int) = maze[lineIndex].toList()
     fun getCol(colIndex: Int): List<Boolean> = maze.map { it[colIndex] }
 
     fun toFileStrings(): List<String> = maze.map {
         it.joinToString(" ") { cell -> if (cell) "1" else "0" }
+    }
+
+    fun printSolution(solutionTrail: List<Pair<Int, Int>>): String {
+        return maze.mapIndexed { i, line ->
+            line.mapIndexed { j, cell ->
+                if (!cell)
+                    BLOCK.WALL.string
+                else
+                    if (Pair(i,j) in solutionTrail)
+                        BLOCK.TRAIL.string
+                    else BLOCK.PASS.string
+            }
+        }.joinToString("\n") { it.joinToString("") }
     }
 
     override fun toString(): String {
@@ -70,5 +66,6 @@ data class Maze(val mazeSize: Int = 10) {
 
 enum class BLOCK(val string: String) {
     WALL("\u2588\u2588"),
-    PASS("  ")
+    PASS("  "),
+    TRAIL("//")
 }

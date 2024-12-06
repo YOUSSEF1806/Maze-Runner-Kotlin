@@ -12,7 +12,7 @@ object MazeGenerator {
         val sideStartEnd = Random.nextBoolean()
         when (sideStartEnd) {
             false -> { //generate Start End in the Top and Bottom of Maze
-                val nearTopSideCells = maze.nearTopSideCells()
+                val nearTopSideCells = nearTopSideCells(maze)
                 for (i in 0..<nearTopSideCells.first().first) {
                     maze.setPass(i, nearTopSideCells.first().second)
                 }
@@ -22,7 +22,7 @@ object MazeGenerator {
             }
 
             true -> { //generate Start End in the Left and Right of Maze
-                val nearLeftSideCells = maze.nearLeftSideCells()
+                val nearLeftSideCells = nearLeftSideCells(maze)
                 for (i in 0..<nearLeftSideCells.first().second) {
                     maze.setPass(nearLeftSideCells.first().first, i)
                 }
@@ -63,5 +63,32 @@ object MazeGenerator {
             .filterValues { it.isNotEmpty() }.toMutableMap()
         buildInnerMazeLoop(maze, possibleCells1)
     }
+
+    fun nearLeftSideCells(maze: Maze): List<Pair<Int, Int>> {
+        val selectedCols = mutableListOf<Int>()
+        (0 until maze.mazeSize).indexOfFirst { maze.getCol(it).contains(true) }.let { selectedCols.add(it) }
+        (0 until maze.mazeSize).indexOfLast { maze.getCol(it).contains(true) }.let { selectedCols.add(it) }
+
+        val selectedColsCells = selectedCols.map { j ->
+            maze.getCol(j).mapIndexedNotNull{ i, _->
+                if (maze.getLine(i)[j]) Pair(i, j) else null
+            }.random()
+        }
+        return selectedColsCells
+    }
+
+    fun nearTopSideCells(maze: Maze): List<Pair<Int, Int>> {
+        val selectedLines = mutableListOf<Int>()
+        (0 until maze.mazeSize).indexOfFirst { maze.getLine(it).contains(true) }.let { selectedLines.add(it) }
+        (0 until maze.mazeSize).indexOfLast { maze.getLine(it).contains(true) }.let { selectedLines.add(it) }
+
+        val selectedLineCells = selectedLines.map { i ->
+            maze.getLine(i).mapIndexedNotNull { j, value ->
+                if (value) Pair(i, j) else null
+            }.random()
+        }
+        return selectedLineCells
+    }
+
 
 }
