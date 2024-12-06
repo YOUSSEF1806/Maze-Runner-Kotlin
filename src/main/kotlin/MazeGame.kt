@@ -20,20 +20,12 @@ object MazeGame {
                 actionMenu1(AppMenu.menu1())
                 actionMenu4()
             }
-            "2" -> {
-                actionMenu2(AppMenu.menu2())
-            }
-            "3" -> {
-                doActionIfNotNull { actionMenu3(AppMenu.menu3()) }
-            }
-            "4" -> {
-                doActionIfNotNull { actionMenu4() }
-            }
-            "5" -> {
-                doActionIfNotNull({ actionMenu5() })
-            }
-            "0" -> { exitFlag = true }
-            else -> { AppMenu.menuOptionError() }
+            "2" -> actionMenu2(AppMenu.menu2())
+            "3" -> doActionIfNotNull { actionMenu3(AppMenu.menu3()) }
+            "4" -> doActionIfNotNull { actionMenu4() }
+            "5" -> doActionIfNotNull { actionMenu5() }
+            "0" -> exitFlag = true
+            else -> AppMenu.menuOptionError()
         }
     }
 

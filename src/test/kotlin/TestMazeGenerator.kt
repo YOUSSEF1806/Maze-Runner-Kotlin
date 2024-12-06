@@ -11,5 +11,8 @@ class TestMazeGenerator {
         println("Maze size ${maze.mazeSize}\n$maze")
         maze = MazeGenerator.generateFullMaze(35)
         println("Maze size ${maze.mazeSize}\n$maze")
+        maze = MazeGenerator.generateFullMaze(5)
+        println("Maze size ${maze.mazeSize}\n$maze")
+
     }
 }

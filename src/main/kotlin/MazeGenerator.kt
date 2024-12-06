@@ -64,7 +64,7 @@ object MazeGenerator {
         buildInnerMazeLoop(maze, possibleCells1)
     }
 
-    fun nearLeftSideCells(maze: Maze): List<Pair<Int, Int>> {
+    private fun nearLeftSideCells(maze: Maze): List<Pair<Int, Int>> {
         val selectedCols = mutableListOf<Int>()
         (0 until maze.mazeSize).indexOfFirst { maze.getCol(it).contains(true) }.let { selectedCols.add(it) }
         (0 until maze.mazeSize).indexOfLast { maze.getCol(it).contains(true) }.let { selectedCols.add(it) }
@@ -77,7 +77,7 @@ object MazeGenerator {
         return selectedColsCells
     }
 
-    fun nearTopSideCells(maze: Maze): List<Pair<Int, Int>> {
+    private fun nearTopSideCells(maze: Maze): List<Pair<Int, Int>> {
         val selectedLines = mutableListOf<Int>()
         (0 until maze.mazeSize).indexOfFirst { maze.getLine(it).contains(true) }.let { selectedLines.add(it) }
         (0 until maze.mazeSize).indexOfLast { maze.getLine(it).contains(true) }.let { selectedLines.add(it) }

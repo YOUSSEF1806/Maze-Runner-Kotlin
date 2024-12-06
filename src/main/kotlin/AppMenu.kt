@@ -16,8 +16,12 @@ object AppMenu {
     }
 
     fun menu1(): Int {
-        println("Please, enter the size of new maze")
-        return readln().toInt()
+        var mazeSize: Int
+        do {
+            println("Please, enter the size of new maze (5 or bigger)")
+            mazeSize = readln().toInt()
+        } while (mazeSize < 5)
+        return mazeSize
     }
 
     fun menu2(): String {
